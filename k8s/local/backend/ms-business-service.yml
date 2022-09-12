@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: galaxy-dev
+  name: app-deployment-customer-management
+  labels:
+    app: service-customer-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service-customer-management
+  template:
+    metadata:
+      labels:
+        app: service-customer-management
+    spec:
+      containers:
+      - name: service-customer-management
+#        image: acraforo255fv.azurecr.io/apptransaction:#{Build.BuildId}#
+        image: service-customer-management
+#        image: natanaelza/service-customer-management:v1
+        imagePullPolicy: "IfNotPresent"
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: aforo.com
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: galaxy-dev
+  name: app-deployment-product-management
+  labels:
+    app: service-product-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service-product-management
+  template:
+    metadata:
+      labels:
+        app: service-product-management
+    spec:
+      containers:
+      - name: service-product-management
+        #image: acraforo255fv.azurecr.io/apptransaction:#{Build.BuildId}#
+        image: service-product-management
+#        image: natanaelza/service-product-management:v1
+        imagePullPolicy: "IfNotPresent"
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: aforo.com
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: galaxy-dev
+  name: app-service-customer-management
+spec:
+  type: LoadBalancer
+  selector:
+    app: service-customer-management
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: galaxy-dev
+  name: app-service-product-management
+spec:
+  type: LoadBalancer
+  selector:
+    app: service-product-management
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80

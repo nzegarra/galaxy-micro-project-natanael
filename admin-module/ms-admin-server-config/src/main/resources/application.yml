@@ -1,0 +1,20 @@
+
+server:
+  #port: 8888
+  port: 80
+spring:
+  application:
+    name: ms-admin-server-config
+  cloud: 
+    config:
+      server:
+        git:
+          uri: https://github.com/nzegarra/customer-followup-ms.git
+          search-paths:
+          - ms-admin-server-data
+          username: nzegarra
+          password: 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
+          clone-on-start: true
+          force-pull: true
+          timeout: 5
+          default-label: master

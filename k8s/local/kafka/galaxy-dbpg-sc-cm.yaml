@@ -1,0 +1,53 @@
+#Se debe agregar un namespace en GCP
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: galaxy-dbpg-sc
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+#Cambiar el provisionador para GCP
+provisioner: k8s.io/minikube-hostpath
+#provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: galaxy-dev
+  name: galaxy-dbpg
+  labels:
+    app: galaxy-dbpg
+data:
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: p05gr352021
+  ORACLE_SID: ORCLCDB
+  ORACLE_EDITION: standard
+  ORACLE_PWD: oracle
+  MYSQL_ROOT_PASSWORD: mysql
+  MYSQL_DATABASE: GALAXY_MS_2022_CLIENTES
+  MYSQL_USER: GALAXY_MS_2022_CLIENTES
+  MYSQL_PASSWORD: mysql
+  MONGO_INITDB_ROOT_USERNAME: mongo
+  MONGO_INITDB_ROOT_PASSWORD: mongo
+  ZOOKEEPER_CLIENT_PORT: 2181
+  ZOOKEEPER_TICK_TIME: 2000
+  #kafka 1
+  KAFKA_BROKER_ID: 1
+  KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:2181
+  KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:9092,PLAINTEXT_HOST://localhost:29092
+  KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+  KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+  KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  #kafka 2
+  KAFKA_BROKER_ID: 2
+  KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:2181
+  KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:9092,PLAINTEXT_HOST://localhost:39092
+  KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+  KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+  KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  #redis
+  REDIS_PASSWORD: redis123
+  #jaeger
+  COLLECTOR_ZIPKIN_HTTP_PORT: 9411

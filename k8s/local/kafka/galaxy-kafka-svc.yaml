@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: galaxy-dev
+  name: app-deployment-zookeeper
+  labels:
+    app: service-zookeeper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service-zookeeper
+  template:
+    metadata:
+      labels:
+        app: service-zookeeper
+    spec:
+      containers:
+      - name: service-zookeeper
+        #image: acraforo255fv.azurecr.io/apptransaction:#{Build.BuildId}#
+        #image: acraforo255nz.azurecr.io/apptransaction:#{Build.BuildId}#
+        image: confluentinc/cp-zookeeper:latest
+        imagePullPolicy: "IfNotPresent"
+        ports:
+        - containerPort: 2181
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: galaxy-dev
+  name: app-service-zookeeper
+  labels:
+    app: app-service-zookeeper
+spec:
+  ports:
+  #- port: 5432
+  #  name: app-service-zookeeper-port
+    - protocol: TCP
+      port: 2181
+      targetPort: 2181
+      #nodePort: 30432
+      #name: app-service-zookeeper-port
+  #Cambiar a LoadBalancer en GCP
+  #type: ClusterIP
+  type: NodePort
+  selector:
+    app: app-service-zookeeper
+  #externalTrafficPolicy: Local

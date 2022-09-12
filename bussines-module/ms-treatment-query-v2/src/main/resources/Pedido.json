@@ -1,0 +1,31 @@
+[{
+  "_id": {
+    "$oid": "62c998c712d90e1fefb93ce1"
+  },
+  "idPedido": 1,
+  "glosa": "Pedido demo",
+  "fechaRegistro": "12/05/2021",
+  "total": 960,
+  "clienteId": 1,
+  "clienteRazonSocial": "TELEFONICA EMPRESAS"
+},{
+  "_id": {
+    "$oid": "62c998db12d90e1fefb93ce2"
+  },
+  "idPedido": 2,
+  "glosa": "Pedido demo 2",
+  "fechaRegistro": "12/03/2022",
+  "total": 1200,
+  "clienteId": 2,
+  "clienteRazonSocial": "CLARO EMPRESAS"
+},{
+  "_id": {
+    "$oid": "62c99b6912d90e1fefb93ce4"
+  },
+  "idPedido": 3,
+  "glosa": "Pedido demo 3",
+  "fechaRegistro": "12/03/2022",
+  "total": 5000,
+  "clienteId": 2,
+  "clienteRazonSocial": "CLARO EMPRESAS"
+}]

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-test
+spec:
+  containers:
+    - name: pod-test
+    image: centos
+    ports:
+      - containerPort: 80
+    imagePullPolicy: Always

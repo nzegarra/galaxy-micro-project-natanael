@@ -1,0 +1,147 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  namespace: galaxy-dev
+  name: galaxy-dbpg-pv
+  labels:
+    app: galaxy-dbpg
+spec:
+  #storageClassName: manual
+  #Cambiar al migrar a GCP para que sea dinámico
+  storageClassName: galaxy-dbpg-sc
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  #Cambiar a tipo cloud en GCP
+  hostPath:
+    path: /k8s/volumes/postgres/data
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  namespace: galaxy-dev
+  name: galaxy-dboracle-pv
+  labels:
+    app: galaxy-dboracle
+spec:
+  #storageClassName: manual
+  #Cambiar al migrar a GCP para que sea dinámico
+  storageClassName: galaxy-dbpg-sc
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  #Cambiar a tipo cloud en GCP
+  hostPath:
+    path: /k8s/volumes/oracle/data
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  namespace: galaxy-dev
+  name: galaxy-dbmysql-pv
+  labels:
+    app: galaxy-dbmysql
+spec:
+  #storageClassName: manual
+  #Cambiar al migrar a GCP para que sea dinámico
+  storageClassName: galaxy-dbpg-sc
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  #Cambiar a tipo cloud en GCP
+  hostPath:
+    path: /k8s/volumes/mysql/data
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  namespace: galaxy-dev
+  name: galaxy-dbmongo-pv
+  labels:
+    app: galaxy-dbmongo
+spec:
+  #storageClassName: manual
+  #Cambiar al migrar a GCP para que sea dinámico
+  storageClassName: galaxy-dbpg-sc
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  #Cambiar a tipo cloud en GCP
+  hostPath:
+    path: /k8s/volumes/mongo/data
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  namespace: galaxy-dev
+  name: galaxy-dbpg-pvc
+  labels:
+    app: galaxy-dbpg
+spec:
+  storageClassName: galaxy-dbpg-sc
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  selector: 
+    matchLabels: 
+      app: galaxy-dbpg
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  namespace: galaxy-dev
+  name: galaxy-dboracle-pvc
+  labels:
+    app: galaxy-dboracle
+spec:
+  storageClassName: galaxy-dbpg-sc
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  selector: 
+    matchLabels: 
+      app: galaxy-dboracle
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  namespace: galaxy-dev
+  name: galaxy-dbmysql-pvc
+  labels:
+    app: galaxy-dbmysql
+spec:
+  storageClassName: galaxy-dbpg-sc
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  selector: 
+    matchLabels: 
+      app: galaxy-dbmysql
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  namespace: galaxy-dev
+  name: galaxy-dbmongo-pvc
+  labels:
+    app: galaxy-dbmongo
+spec:
+  storageClassName: galaxy-dbpg-sc
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  selector: 
+    matchLabels: 
+      app: galaxy-dbmongo

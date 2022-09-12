@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: galaxy-dev
+  name: app-deployment-admin-registry
+  labels:
+    app: service-admin-registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service-admin-registry
+  template:
+    metadata:
+      labels:
+        app: service-admin-registry
+    spec:
+      containers:
+      - name: service-admin-registry
+        #image: acraforo255fv.azurecr.io/apptransaction:#{Build.BuildId}#
+        #image: acraforo255nz.azurecr.io/apptransaction:#{Build.BuildId}#
+        image: natanaelza/service-admin-registry:v2
+        imagePullPolicy: "IfNotPresent"
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: aforo.com
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: galaxy-dev
+  name: app-service-admin-registry
+spec:
+  type: LoadBalancer
+  selector:
+    app: service-admin-registry
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80

@@ -1,0 +1,67 @@
+server:
+  #port: 8891
+  port: 80
+spring:
+  cloud:
+    gateway:
+      routes:
+#      - id:  ms-customer-management
+#        uri:  lb://ms-customer-management
+      - id:  ms-customer-management
+        uri:  http://app-service-customer-management.galaxy-dev.svc.cluster.local:80
+        predicates:
+          - Path=/api/customer/**
+        filters:
+          - StripPrefix=2
+#      - id:  ms-product-management
+#        uri:  lb://ms-product-management
+      - id:  ms-product-management
+        uri:  http://app-service-product-management.galaxy-dev.svc.cluster.local:80
+        predicates:
+          - Path=/api/product/**
+        filters:
+          - StripPrefix=2
+#      - id:  ms-treatment-command-v2# sin k8s
+#        uri:  lb://ms-treatment-command-v2# sin k8s
+      - id:  ms-treatment-command-v2 #con k8s
+#        uri:  lb://app-service-command.galaxy-dev.svc.cluster.local # validar para hacer funcionar con balanceador
+        uri:  http://app-service-command.galaxy-dev.svc.cluster.local:80 #conk8s
+        predicates:
+          - Path=/api/treatment-command/**
+        filters:
+          - StripPrefix=2
+#      - id:  ms-treatment-query-v2
+#        uri:  lb://ms-treatment-query-v2
+      - id:  ms-treatment-query-v2
+        uri:  http://app-service-query.galaxy-dev.svc.cluster.local:80
+        predicates:
+          - Path=/api/treatment-query/**
+        filters:
+          - StripPrefix=2
+#      - id:  ms-treatment-producer
+#        uri:  lb://ms-treatment-producer
+      - id:  ms-treatment-producer
+        uri:  http://app-service-producer.galaxy-dev.svc.cluster.local:80
+        predicates:
+          - Path=/api/treatment-producer/**
+        filters:
+          - StripPrefix=2
+      - id:  ms-admin-oauth
+        uri:  http://app-service-admin-oauth.galaxy-dev.svc.cluster.local:80
+        predicates:
+          - Path=/api/security/**
+        filters:
+          - StripPrefix=2
+      - id:  ms-admin-user
+        uri:  http://app-service-admin-user.galaxy-dev.svc.cluster.local:80
+        predicates:
+          - Path=/api/usuarios/**
+        filters:
+          - StripPrefix=2
+# Registry Client
+eureka:
+   client:
+      fetch-registry: true
+      serviceUrl:
+         #defaultZone: http://localhost:8889/eureka
+          defaultZone: http://app-service-admin-registry.galaxy-dev.svc.cluster.local:80/eureka

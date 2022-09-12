@@ -1,0 +1,278 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: galaxy-dev
+  name: galaxy-dbpg
+  labels:
+    app: galaxy-dbpg
+spec:
+  serviceName: "galaxy-dbpg"
+  #Verificar para ver si se cambia a 1 en GCp
+  revisionHistoryLimit: 2
+  replicas: 1
+  selector:
+    matchLabels:
+      app: galaxy-dbpg
+  template:
+    metadata:
+      labels:
+        app: galaxy-dbpg
+    spec:
+      containers:
+      - name: galaxy-dbpg
+        image: postgres:alpine3.14
+        #Check GCP
+        imagePullPolicy: "IfNotPresent"
+        resources:
+          requests:
+            memory: 256M
+            cpu: 200m
+          limits:
+            memory: 512M
+            cpu: 500m
+        envFrom:
+        - configMapRef:
+            name: galaxy-dbpg
+        ports:
+        - containerPort: 5432
+          #15 caracteres
+          name: dbpg-port
+        volumeMounts:
+        - name: galaxy-dbpg-pv-data
+          mountPath: "/var/lib/postgresql/data"
+      volumes:
+      - name: galaxy-dbpg-pv-data
+        persistentVolumeClaim:
+          claimName: galaxy-dbpg-pvc
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: galaxy-dev
+  name: galaxy-dboracle
+  labels:
+    app: galaxy-dboracle
+spec:
+  serviceName: "galaxy-dboracle"
+  #Verificar para ver si se cambia a 1 en GCp
+  revisionHistoryLimit: 2
+  replicas: 1
+  selector:
+    matchLabels:
+      app: galaxy-dboracle
+  template:
+    metadata:
+      labels:
+        app: galaxy-dboracle
+    spec:
+      containers:
+      - name: galaxy-dboracle
+        image: container-registry.oracle.com/database/enterprise:12.2.0.1-slim
+        #Check GCP
+        imagePullPolicy: "IfNotPresent"
+        resources:
+          requests:
+            memory: 256M
+            cpu: 200m
+          limits:
+            memory: 512M
+            cpu: 500m
+        envFrom:
+        - configMapRef:
+            name: galaxy-dbpg
+        ports:
+        - containerPort: 1521
+          #15 caracteres
+          name: dboracle-port
+        volumeMounts:
+        - name: galaxy-dboracle-pv-data
+          mountPath: "/ORCL"
+      volumes:
+      - name: galaxy-dboracle-pv-data
+        persistentVolumeClaim:
+          claimName: galaxy-dboracle-pvc
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: galaxy-dev
+  name: galaxy-dbmysql
+  labels:
+    app: galaxy-dbmysql
+spec:
+  serviceName: "galaxy-dbmysql"
+  #Verificar para ver si se cambia a 1 en GCp
+  revisionHistoryLimit: 2
+  replicas: 1
+  selector:
+    matchLabels:
+      app: galaxy-dbmysql
+  template:
+    metadata:
+      labels:
+        app: galaxy-dbmysql
+    spec:
+      containers:
+      - name: galaxy-dbmysql
+        image: mysql:8.0.29
+        #Check GCP
+        imagePullPolicy: "IfNotPresent"
+        resources:
+          requests:
+            memory: 256M
+            cpu: 200m
+          limits:
+            memory: 512M
+            cpu: 500m
+        envFrom:
+        - configMapRef:
+            name: galaxy-dbpg
+        ports:
+        - containerPort: 3306
+          #15 caracteres
+          name: dbmysql-port
+        volumeMounts:
+        - name: galaxy-dbmysql-pv-data
+          mountPath: "/var/lib/mysql"
+      volumes:
+      - name: galaxy-dbmysql-pv-data
+        persistentVolumeClaim:
+          claimName: galaxy-dbmysql-pvc
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: galaxy-dev
+  name: galaxy-dbmongo
+  labels:
+    app: galaxy-dbmongo
+spec:
+  serviceName: "galaxy-dbmongo"
+  #Verificar para ver si se cambia a 1 en GCp
+  revisionHistoryLimit: 2
+  replicas: 1
+  selector:
+    matchLabels:
+      app: galaxy-dbmongo
+  template:
+    metadata:
+      labels:
+        app: galaxy-dbmongo
+    spec:
+      containers:
+      - name: galaxy-dbmongo
+        image: mongo:5.0.2
+        #Check GCP
+        imagePullPolicy: "IfNotPresent"
+        resources:
+          requests:
+            memory: 256M
+            cpu: 200m
+          limits:
+            memory: 512M
+            cpu: 500m
+        envFrom:
+        - configMapRef:
+            name: galaxy-dbpg
+        ports:
+        - containerPort: 27017
+          #15 caracteres
+          name: dbmongo-port
+        volumeMounts:
+        - name: galaxy-dbmongo-pv-data
+          mountPath: "/data/db"
+      volumes:
+      - name: galaxy-dbmongo-pv-data
+        persistentVolumeClaim:
+          claimName: galaxy-dbmongo-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: galaxy-dev
+  name: galaxy-dbpg
+  labels:
+    app: galaxy-dbpg
+spec:
+  ports:
+  #- port: 5432
+  #  name: galaxy-dbpg-port
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+      #nodePort: 30432
+      #name: galaxy-dbpg-port
+  #Cambiar a LoadBalancer en GCP
+  #type: ClusterIP
+  type: NodePort
+  selector:
+    app: galaxy-dbpg
+  #externalTrafficPolicy: Local
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: galaxy-dev
+  name: galaxy-dboracle
+  labels:
+    app: galaxy-dboracle
+spec:
+  ports:
+  #- port: 1521
+  #  name: galaxy-dboracle-port
+    - protocol: TCP
+      port: 1521
+      targetPort: 1521
+      #nodePort: 30432
+      #name: galaxy-dbpg-port
+  #Cambiar a LoadBalancer en GCP
+  #type: ClusterIP
+  type: NodePort
+  selector:
+    app: galaxy-dboracle
+  #externalTrafficPolicy: Local
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: galaxy-dev
+  name: galaxy-dbmysql
+  labels:
+    app: galaxy-dbmysql
+spec:
+  ports:
+  #- port: 3306
+  #  name: galaxy-dbmysql-port
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+      #name: galaxy-dbpg-port
+  #Cambiar a LoadBalancer en GCP
+  #type: ClusterIP
+  type: NodePort
+  selector:
+    app: galaxy-dbmysql
+  #externalTrafficPolicy: Local
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: galaxy-dev
+  name: galaxy-dbmongo
+  labels:
+    app: galaxy-dbmongo
+spec:
+  ports:
+  #- port: 27017
+  #  name: galaxy-dbmongo-port
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+      #nodePort: 30432
+      #name: galaxy-dbpg-port
+  #Cambiar a LoadBalancer en GCP
+  #type: ClusterIP
+  type: NodePort
+  selector:
+    app: galaxy-dbmongo
+  #externalTrafficPolicy: Local

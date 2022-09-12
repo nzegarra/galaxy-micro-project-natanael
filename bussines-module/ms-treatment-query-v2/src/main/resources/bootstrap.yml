@@ -1,0 +1,33 @@
+application:
+  title: Microservicios de Tratamiento - Query
+  version: 1.0.0
+  author: Galaxy Training
+  
+spring:
+  application:
+    name: ms-treatment-query-v2
+#  redis:
+#     host: localhost
+#     port: 6379
+#     password: redis123
+#     timeout: 10000
+  cloud:
+    config:
+#      uri: http://localhost:8888
+      uri: http://app-service-admin-config.galaxy-dev.svc.cluster.local:80
+      fail-fast: true
+      retry:
+         max-attempts: 20
+         max-interval: 15000
+         initial-interval: 10000
+opentracing:
+  jaeger:
+    enabled: true
+#    udp-sender:
+#      host: host.minikube.internal
+#      port: 6831
+    log-spans: true
+    const-sampler.decision: true
+    service-name: app-service-query
+    http-sender:
+      url: http://host.minikube.internal:14268/api/traces

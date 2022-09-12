@@ -1,0 +1,32 @@
+server:
+  #port: 8082
+  port: 80
+spring:
+  datasource:
+    #url: jdbc:mysql://localhost:3307/FOLLOWUP_PRODUCT?serverTimezone=GMT-6
+    url: jdbc:mysql://galaxy-dbmysql.galaxy-dev.svc.cluster.local:3306/FOLLOWUP_PRODUCT?serverTimezone=GMT-6
+    #username: FOLLOWUP_PRODUCT
+    username: root
+    password: mysql
+    driverClassName: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+# Registry Client
+eureka:
+   client:
+      fetch-registry: true
+      serviceUrl:
+         #defaultZone: http://localhost:8889/eureka
+         defaultZone: http://app-service-admin-registry.galaxy-dev.svc.cluster.local:80/eureka
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+#add custom information to actuator endpoint info
+info:
+  application:
+    name: Product Management
+    description: MS Product

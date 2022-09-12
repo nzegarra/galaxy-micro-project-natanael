@@ -1,0 +1,31 @@
+
+
+
+spring:
+  application:
+    name: ms-product-management
+  profiles:
+    active: native
+  config:    
+    #import: configserver:http://localhost:8888
+    import: configserver:http://app-service-admin-config.galaxy-dev.svc.cluster.local:80
+  cloud:
+    config:
+      fail-fast: true
+      retry:
+         max-attempts: 20
+         max-interval: 15000
+         initial-interval: 10000
+#  config:
+#    import: "optional:configserver:"
+opentracing:
+  jaeger:
+    enabled: true
+#    udp-sender:
+#      host: host.minikube.internal
+#      port: 6831
+    log-spans: true
+    const-sampler.decision: true
+    service-name: app-service-product-management
+    http-sender:
+      url: http://host.minikube.internal:14268/api/traces

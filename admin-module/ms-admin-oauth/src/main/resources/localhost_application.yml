@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: ms-admin-oauth
+server:
+  port: ${PORT:0} 
+eureka:
+   instance:
+      hostname: localhost
+   client:
+        register-with-eureka: true
+        fetch-registry: true
+        serviceUrl:
+           defaultZone: http://localhost:8761/eureka
+   wait-time-in-ms-when-sync-empty: 0
+config:
+  security:
+    oauth:
+      client:
+        id: galaxyFrontend
+        secret: 123
+      jwt.key: galaxy2022123456789natanael

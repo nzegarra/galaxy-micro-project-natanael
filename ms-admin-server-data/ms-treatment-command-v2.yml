@@ -1,0 +1,45 @@
+
+server:
+  #port: 8084
+  port: 80
+    
+# MongoDB #
+spring:
+   data:
+      mongodb:
+         database: treatment_query
+         username: mongo
+         password: mongo
+         #host: localhost
+         host: galaxy-dbmongo.galaxy-dev.svc.cluster.local
+         #port: 27018
+         port: 27017
+
+# Registry Client
+eureka:
+   #instance:
+     #instace-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+     #hostName: ${spring.application.name}
+     #hostName: app-service-command
+   client:
+      fetch-registry: true
+      serviceUrl:
+         #defaultZone: http://localhost:8889/eureka
+         defaultZone: http://app-service-admin-registry.galaxy-dev.svc.cluster.local:80/eureka
+#Metrics related configurations
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+    gateway:
+      enabled: true   
+  endpoints:
+      web:
+        exposure:
+          include: "*"
+  metrics:
+    export:
+      prometheus:
+        enabled: true

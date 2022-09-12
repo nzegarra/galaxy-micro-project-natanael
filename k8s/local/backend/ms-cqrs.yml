@@ -1,0 +1,167 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: galaxy-dev
+  name: app-deployment-command
+  labels:
+    app: service-command
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service-command
+  template:
+    metadata:
+      labels:
+        app: service-command
+    spec:
+      containers:
+      - name: service-command
+        #image: acraforo255fv.azurecr.io/apptransaction:#{Build.BuildId}#
+        image: service-command
+#        image: natanaelza/service-command:v1
+        imagePullPolicy: "IfNotPresent"
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: aforo.com
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: galaxy-dev
+  name: app-deployment-query
+  labels:
+    app: service-query
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service-query
+  template:
+    metadata:
+      labels:
+        app: service-query
+    spec:
+      containers:
+      - name: service-query
+        #image: acraforo255fv.azurecr.io/apptransaction:#{Build.BuildId}#
+        image: service-query
+#        image: natanaelza/service-query:v3
+        imagePullPolicy: "IfNotPresent"
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: aforo.com
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: galaxy-dev
+  name: app-deployment-producer
+  labels:
+    app: service-producer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service-producer
+  template:
+    metadata:
+      labels:
+        app: service-producer
+    spec:
+      containers:
+      - name: service-producer
+#        image: acraforo255fv.azurecr.io/apptransaction:#{Build.BuildId}#
+        image: service-producer
+#        image: natanaelza/service-producer:v1
+        imagePullPolicy: "IfNotPresent"
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: aforo.com
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: galaxy-dev
+  name: app-deployment-consumer
+  labels:
+    app: service-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service-consumer
+  template:
+    metadata:
+      labels:
+        app: service-consumer
+    spec:
+      containers:
+      - name: service-consumer
+#        image: acraforo255fv.azurecr.io/apptransaction:#{Build.BuildId}#
+        image: service-consumer
+#        image: natanaelza/service-consumer:v2
+        imagePullPolicy: "IfNotPresent"
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: aforo.com
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: galaxy-dev
+  name: app-service-command
+spec:
+  type: LoadBalancer
+  selector:
+    app: service-command
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: galaxy-dev
+  name: app-service-query
+spec:
+  type: LoadBalancer
+  selector:
+    app: service-query
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: galaxy-dev
+  name: app-service-producer
+spec:
+  type: LoadBalancer
+  selector:
+    app: service-producer
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: galaxy-dev
+  name: app-service-consumer
+spec:
+  type: LoadBalancer
+  selector:
+    app: service-consumer
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80

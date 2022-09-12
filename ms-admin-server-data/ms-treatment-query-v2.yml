@@ -1,0 +1,54 @@
+
+#application:
+#  title: Microservicios de Pedidos - Query
+#  version: 1.0.0
+#  author: Galaxy Training
+
+server:
+  #port: 8085
+  port: 80
+    
+# MongoDB #
+spring:
+  data:
+    mongodb:
+      database: treatment_query
+      username: mongo
+      password: mongo
+#      host: localhost
+#      host: 192.168.49.2
+      host: galaxy-dbmongo.galaxy-dev.svc.cluster.local
+#      port: 27018
+      port: 27017
+#      port: 31679
+  redis:
+#    host: 192.168.49.1
+    host: host.minikube.internal  
+    port: 6379
+    password: redis123
+    timeout: 10000
+
+# Registry Client
+eureka:
+  client:
+    fetch-registry: true
+    serviceUrl:
+#      defaultZone: http://localhost:8761/eureka
+         defaultZone: http://app-service-admin-registry.galaxy-dev.svc.cluster.local:80/eureka
+#Metrics related configurations
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+    gateway:
+      enabled: true   
+  endpoints:
+      web:
+        exposure:
+          include: "*"
+  metrics:
+    export:
+      prometheus:
+        enabled: true

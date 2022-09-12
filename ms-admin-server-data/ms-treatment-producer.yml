@@ -1,0 +1,39 @@
+
+server:
+  #port: 8086
+  port: 80
+    
+# Apache Kafka #
+custom:
+  kafka:
+    #bootstrap-servers: localhost:29092,localhost:39092
+    #bootstrap-servers: 192.168.1.54:29092,192.168.1.54:49092
+    #bootstrap-servers: 192.168.49.1:29092,192.168.49.1:49092
+    bootstrap-servers: host.minikube.internal:29092,host.minikube.internal:49092
+    topic-name: topic-treatment #Cola
+    group-id: group-id      
+
+# Registry Client
+eureka:
+   client:
+      fetch-registry: true
+      serviceUrl:
+         #defaultZone: http://localhost:8889/eureka
+         defaultZone: http://app-service-admin-registry.galaxy-dev.svc.cluster.local:80/eureka
+#Metrics related configurations
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+    gateway:
+      enabled: true   
+  endpoints:
+      web:
+        exposure:
+          include: "*"
+  metrics:
+    export:
+      prometheus:
+        enabled: true

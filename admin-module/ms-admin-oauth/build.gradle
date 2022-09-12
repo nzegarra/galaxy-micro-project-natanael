@@ -1,0 +1,18 @@
+
+
+dependencies {
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	//implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	implementation group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.8.RELEASE'
+	implementation group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.1.1.RELEASE'
+	implementation group: 'org.glassfish.jaxb', name: 'jaxb-runtime'
+	implementation group: 'io.opentracing.contrib', name: 'opentracing-spring-jaeger-cloud-starter', version: '3.2.2'
+}
+bootJar {
+	enabled = true
+}
+

@@ -1,0 +1,34 @@
+server:
+  #port: 8081
+  port: 80
+spring:
+  datasource:
+    #url: jdbc:oracle:thin:@localhost:1522:ORCLCDB
+    #url: jdbc:oracle:thin:@192.168.1.54:1522:ORCLCDB
+    url: jdbc:oracle:thin:@host.minikube.internal:1522:ORCLCDB
+    username: FOLLOWUP_CUSTOMER
+    password: oracle
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+  jpa:
+    hibernate:
+      ddl-auto: create
+# Registry Client
+eureka:
+   instance: 
+     instace-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+   client:
+      fetch-registry: true
+      serviceUrl:
+         #defaultZone: http://localhost:8889/eureka
+         defaultZone: http://app-service-admin-registry.galaxy-dev.svc.cluster.local:80/eureka
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+#add custom information to actuator endpoint info
+info:
+  application:
+    name: Customer Management
+    description: MS 

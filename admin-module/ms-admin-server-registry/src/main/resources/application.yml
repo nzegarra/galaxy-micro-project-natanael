@@ -1,0 +1,17 @@
+
+spring:
+  application:
+    name: ms-admin-server-registry
+  profiles:
+    active: native
+  config:    
+    #import: configserver:http://localhost:8888
+    import: configserver:http://app-service-admin-config.galaxy-dev.svc.cluster.local:80
+  cloud:
+    config:
+#      uri: http://localhost:8888 en deshuso
+      fail-fast: true
+      retry:
+         max-attempts: 20
+         max-interval: 15000
+         initial-interval: 10000

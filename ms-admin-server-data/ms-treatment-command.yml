@@ -1,0 +1,38 @@
+
+server:
+  port: 8084
+    
+# MongoDB #
+spring:
+   data:
+      mongodb:
+         database: treatment_query
+        # username: mongo
+        # password: mongo
+         host: localhost
+         port: 27018
+
+# Registry Client
+eureka:
+   client:
+      fetch-registry: true
+      serviceUrl:
+         defaultZone: http://localhost:8889/eureka
+         
+#Metrics related configurations
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+    gateway:
+      enabled: true   
+  endpoints:
+      web:
+        exposure:
+          include: "*"
+  metrics:
+    export:
+      prometheus:
+        enabled: true
